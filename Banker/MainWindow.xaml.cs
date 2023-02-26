@@ -1,4 +1,5 @@
-﻿using Banker.VIEW;
+﻿using Banker.DATA;
+using Banker.VIEW;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,9 @@ namespace Banker
     /// </summary>
     public partial class MainWindow : Window
     {
+        PAGE_MONTH MONTH;
         PAGE_USAGE USAGE;
+        PAGE_META META;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,9 +33,39 @@ namespace Banker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             USAGE = new PAGE_USAGE();
+            META = new PAGE_META();
+            MONTH = new PAGE_MONTH();
 
             frame.Navigate(USAGE);
+        }
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MASTER.instance.Done();
+        }
+
+        private void BTN_PageChange(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            
+            
+            if (btn == btn_page_month)
+            {
+                frame.Navigate(MONTH);
+
+            }
+            else if (btn == btn_page_usage)
+            {
+                frame.Navigate(USAGE);
+
+            }
+            else if(btn == btn_page_meta)
+            {
+                frame.Navigate(META);
+
+            }
 
         }
+
+        
     }
 }

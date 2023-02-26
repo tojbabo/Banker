@@ -4,42 +4,106 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Banker.VIEW"
-      mc:Ignorable="d" 
+      mc:Ignorable="d" Loaded="Page_Loaded"
       d:DesignHeight="450" d:DesignWidth="800">
     <Page.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./_resource/Control.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="./_resource/Base.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
     </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <!--리스트 헤더-->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0">
-                <TextBlock Text="날짜" />
+                <TextBlock Text="날짜"/>
             </Border>
             <Border Grid.Column="1">
-                <TextBlock Text="은행" />
+                <TextBlock Text="은행"/>
             </Border>
             <Border Grid.Column="2">
-                <TextBlock Text="금액" />
+                <TextBlock Text="금액"/>
             </Border>
             <Border Grid.Column="3">
-                <TextBlock Text="비고" />
+                <TextBlock Text="사용처"/>
+            </Border>
+            <Border Grid.Column="4">
+                <TextBlock Text="상세"/>
             </Border>
         </Grid>
-        <ListBox x:Name="LB" Grid.Row="1">
-            
+        <!--데이터 리스트-->
+        <ListBox x:Name="LB" Grid.Row="1" ItemsSource="{Binding DATALIST}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border>
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0,0.5,0,0.5" Height="50">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding DAY}" Grid.Column="0" FontSize="18" />
+                            <TextBlock Text="{Binding BANK}" Grid.Column="1" FontSize="18" />
+                            <TextBlock Text="{Binding PRICE}" Grid.Column="2" FontSize="18" />
+                            <TextBlock Text="{Binding CATEGORY}" Grid.Column="3" FontSize="18" />
+                            <TextBlock Text="{Binding DESC}" Grid.Column="4" FontSize="18" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
+        <!--입력 박스/ 버튼-->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="INPUT_date" Grid.Column="0"/>
+            <ComboBox x:Name="INPUT_bank" Grid.Column="1"/>
+            <ComboBox x:Name="INPUT_use" Grid.Column="2"/>
+            <TextBox x:Name="INPUT_price" Grid.Column="3"
+                     Style="{DynamicResource HintBox}" Tag="가격"/>
+            <ComboBox x:Name="INPUT_category" Grid.Column="4"/>
+            <TextBox x:Name="INPUT_desc" Grid.Column="5"
+                     Style="{DynamicResource HintBox}" Tag="상세"/>
+            <Button Grid.Column="6" Click="BTN_DataInput">ㅇㅇ</Button>
+        </Grid>
     </Grid>
 </Page>

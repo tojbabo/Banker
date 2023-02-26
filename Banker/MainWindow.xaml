@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Banker"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closed="Window_Closed"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,12 +16,14 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0">
-                <Button x:Name="btn_page_main" Content="메인"/>
-            </Border>
+            <Button Grid.Row="0"  x:Name="btn_page_month" Click="BTN_PageChange" Content="메인"/>
+            <Button Grid.Row="1"  x:Name="btn_page_usage" Click="BTN_PageChange" Content="상세"/>
+            <Button Grid.Row="2"  x:Name="btn_page_meta" Click="BTN_PageChange" Content="메타"/>
             
         </Grid>
-        <Frame Name="frame" Grid.Column="1"/>
+        <Frame Name="frame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

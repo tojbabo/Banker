@@ -55,9 +55,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DATA\ABSTRACT\INPC.cs" />
+    <Compile Include="DATA\KEYS.cs" />
+    <Compile Include="DATA\MASTER.cs" />
+    <Compile Include="DATA\MetaData.cs" />
+    <Compile Include="DATA\MonthData.cs" />
+    <Compile Include="DATA\Static.cs" />
     <Compile Include="MODEL\ENUM.cs" />
+    <Compile Include="MODEL\MonthItem.cs" />
     <Compile Include="MODEL\UsageItem.cs" />
+    <Compile Include="UTIL\FileMaster.cs" />
+    <Compile Include="UTIL\STRING.cs" />
+    <Compile Include="VIEWMODEL\META.cs" />
+    <Compile Include="VIEWMODEL\MONTH.cs" />
     <Compile Include="VIEWMODEL\USAGE.cs" />
+    <Compile Include="VIEW\PAGE_META.xaml.cs">
+      <DependentUpon>PAGE_META.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VIEW\PAGE_MONTH.xaml.cs">
+      <DependentUpon>PAGE_MONTH.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VIEW\PAGE_USAGE.xaml.cs">
       <DependentUpon>PAGE_USAGE.xaml</DependentUpon>
     </Compile>
@@ -73,7 +90,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="VIEW\PAGE_META.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VIEW\PAGE_MONTH.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VIEW\PAGE_USAGE.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VIEW\_resource\Base.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VIEW\_resource\Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,6 +133,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

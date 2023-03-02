@@ -25,6 +25,7 @@ namespace Banker
         PAGE_MONTH MONTH;
         PAGE_USAGE USAGE;
         PAGE_META META;
+        MASTER master;
         public MainWindow()
         {
             InitializeComponent();
@@ -32,11 +33,13 @@ namespace Banker
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            master = MASTER.instance;
+            master.Init();
             USAGE = new PAGE_USAGE();
             META = new PAGE_META();
             MONTH = new PAGE_MONTH();
 
-            frame.Navigate(USAGE);
+            frame.Navigate(MONTH);
         }
         private void Window_Closed(object sender, EventArgs e)
         {

@@ -23,6 +23,8 @@ namespace Banker.DATA
         #endregion
 
         public MetaData metadata;
+        public MainData maindata;
+        public DateTime targetdate;
 
         #region about vm
         private USAGE _usage;
@@ -37,9 +39,20 @@ namespace Banker.DATA
 
         public void Init()
         {
+            targetdate = DateTime.Now;
             metadata = new MetaData();
+            maindata = new MainData(targetdate.Year, targetdate.Month);
+            Load();
             _Init_VM();
         }
+
+        public void Load()
+        {
+            metadata.LoadData();
+            maindata.LoadData();
+        }
+
+
         private void _Init_VM()
         {
             _usage = new USAGE();

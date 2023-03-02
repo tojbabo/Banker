@@ -19,17 +19,34 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0">
-
+            <ListBox Grid.Row="0" ItemsSource="{Binding initcashs}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding TIME}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding BANK}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding PRICE}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <TextBox Grid.Column="0" x:Name="INPUT_initcash"/>
-                <Button Grid.Column="1" Click="BTN_InitCashInput" />
+                <ComboBox Grid.Row="0" x:Name="INPUT_initbank"/>
+                <TextBox Grid.Column="1" x:Name="INPUT_initcash"
+                         PreviewTextInput="OnlyNumber" 
+                         TextChanged="NumberDecoration"/>
+                <Button Grid.Column="2" Content="잔액 정리" 
+                        Click="BTN_InitCashInput" />
             </Grid>
 
         </Grid>
@@ -54,7 +71,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" x:Name="INPUT_category"/>
-                <Button Grid.Column="1" Click="BTN_CategoryInput" />
+                <Button Grid.Column="1" Content="추가" Click="BTN_CategoryInput" />
             </Grid>
         </Grid>
 

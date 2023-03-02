@@ -59,9 +59,10 @@
     <Compile Include="DATA\KEYS.cs" />
     <Compile Include="DATA\MASTER.cs" />
     <Compile Include="DATA\MetaData.cs" />
-    <Compile Include="DATA\MonthData.cs" />
+    <Compile Include="DATA\MainData.cs" />
     <Compile Include="DATA\Static.cs" />
     <Compile Include="MODEL\ENUM.cs" />
+    <Compile Include="MODEL\InitItem.cs" />
     <Compile Include="MODEL\MonthItem.cs" />
     <Compile Include="MODEL\UsageItem.cs" />
     <Compile Include="UTIL\FileMaster.cs" />

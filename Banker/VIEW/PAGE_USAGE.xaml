@@ -97,12 +97,17 @@
             </Grid.ColumnDefinitions>
             <ComboBox x:Name="INPUT_date" Grid.Column="0"/>
             <ComboBox x:Name="INPUT_bank" Grid.Column="1"/>
-            <ComboBox x:Name="INPUT_use" Grid.Column="2"/>
+            <ComboBox x:Name="INPUT_use" Grid.Column="2"
+                      SelectionChanged="Usage_Change"/>
             <TextBox x:Name="INPUT_price" Grid.Column="3"
-                     Style="{DynamicResource HintBox}" Tag="가격"/>
+                     Style="{DynamicResource HintBox}" Tag="가격" 
+                     PreviewTextInput="OnlyNumber"
+                     TextChanged="NumberDecoration"/>
             <ComboBox x:Name="INPUT_category" Grid.Column="4"/>
             <TextBox x:Name="INPUT_desc" Grid.Column="5"
                      Style="{DynamicResource HintBox}" Tag="상세"/>
+            <ComboBox x:Name="INPUT_bank_sub" Grid.Column="4" 
+                      Grid.ColumnSpan="2" Visibility="Hidden"/>
             <Button Grid.Column="6" Click="BTN_DataInput">ㅇㅇ</Button>
         </Grid>
     </Grid>

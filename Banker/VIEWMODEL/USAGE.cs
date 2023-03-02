@@ -18,15 +18,13 @@ namespace Banker.VIEWMODEL
         #endregion
 
         private MASTER _master;
-        public MonthData data { get; set; }
+        private MainData data { get => _master.maindata; }
         private DateTime _today;
 
         public USAGE()
         {
             _master = MASTER.instance;
             _today = DateTime.Now;
-            data = new MonthData(_today.Year, _today.Month);
-            data.LoadData();
         }
 
         public bool InputData(int date, TypeBank bank, TypeUsage usage, int price, string category, string desc)
@@ -43,6 +41,23 @@ namespace Banker.VIEWMODEL
                 category = v.Key,
                 price = price,
                 desc = desc,
+            };
+
+            DATALIST.Add(d);
+            data.SaveData();
+
+            return true;
+        }
+        public bool InputData(int date, TypeBank bank, TypeUsage usage, int price, TypeBank to)
+        {
+            var d = new UsageItem
+            {
+                month = _today.Month,
+                day = date,
+                bank = bank,
+                tobank = to,
+                usage = usage,
+                price = price,
             };
 
             DATALIST.Add(d);

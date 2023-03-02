@@ -33,10 +33,10 @@ namespace Banker.VIEW
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            master.Init();
-
             vm = master.month;
             this.DataContext = vm;
+
+            vm.LoadData();
 
         }
     }

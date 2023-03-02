@@ -20,6 +20,7 @@ namespace Banker.MODEL
         public int month { get; set; }
         public int day { get; set; }
         public TypeBank bank { get; set; }
+        public TypeBank? tobank { get; set; }
         public TypeUsage usage { get; set; }
         public int price { get; set; }
         public int category { get; set; }

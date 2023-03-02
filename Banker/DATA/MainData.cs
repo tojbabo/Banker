@@ -10,7 +10,7 @@ using static Banker.MODEL.ENUM;
 
 namespace Banker.DATA
 {
-    public class MonthData
+    public class MainData
     {
         private int _year;
         private int _month;
@@ -18,7 +18,7 @@ namespace Banker.DATA
 
         public ObservableCollection<UsageItem> datalist { get; set; }
 
-        public MonthData(int year, int month)
+        public MainData(int year, int month)
         {
             this._year = year;
             this._month = month;

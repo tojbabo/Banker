@@ -25,6 +25,7 @@ namespace Banker.DATA
         public MetaData metadata;
         public MainData maindata;
         public DateTime targetdate;
+        public MainWindow main;
 
         #region about vm
         private USAGE _usage;
@@ -37,8 +38,9 @@ namespace Banker.DATA
         public META META { get => _meta; }
         #endregion
 
-        public void Init()
+        public void Init(MainWindow main)
         {
+            this.main = main;
             targetdate = DateTime.Now;
             metadata = new MetaData();
             maindata = new MainData(targetdate.Year, targetdate.Month);

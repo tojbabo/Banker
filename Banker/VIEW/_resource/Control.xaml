@@ -32,5 +32,10 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>   
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="MonthTB" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="17"/>
+    </Style>
 </ResourceDictionary>

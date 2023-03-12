@@ -1,4 +1,5 @@
-﻿using Banker.MODEL;
+﻿using Banker.DATA.ABSTRACT;
+using Banker.MODEL;
 using Banker.UTIL;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ using static Banker.MODEL.ENUM;
 
 namespace Banker.DATA
 {
-    public class MetaData
+    public class MetaData : INPC
     {
         private Dictionary<string, string> sources;
         public Dictionary<int,string> categorys { get; set; }
         public ObservableCollection<InitItem> inits { get; set; }
 
-
+        
         public MetaData()
         {
             categorys = new Dictionary<int, string>();
@@ -121,5 +122,19 @@ namespace Banker.DATA
                 $"{{{KEYS.INITCASH}:{{{init_str}}}}}";
             FileMaster.Write("meta", source, false);
         }    
+        
+        public string GetCategory(int key)
+        {
+            try
+            {
+                return categorys[key];
+
+            }catch(Exception e)
+            {
+                return "";
+                
+            }
+        }
+   
     }
 }

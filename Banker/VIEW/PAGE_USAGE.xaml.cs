@@ -19,6 +19,8 @@ namespace Banker.VIEW
     {
         private MASTER master = MASTER.instance;
         private USAGE vm;
+        private TypeBank nowbank = TypeBank.none;
+        private TYPEUSAGEDATA pagetype = TYPEUSAGEDATA.entire;
 
         public PAGE_USAGE()
         {
@@ -30,6 +32,8 @@ namespace Banker.VIEW
             vm = master.usage;
             this.DataContext = vm;
             Create_CBItem();
+
+            vm.LoadData(pagetype, nowbank);
         }
 
 
@@ -40,7 +44,9 @@ namespace Banker.VIEW
             var bank = INPUT_bank.SelectedItem as TypeBank?;
             var date = list_date[INPUT_date.SelectedIndex];
             var usage = list_usage[INPUT_use.SelectedIndex];
-            var price = Convert.ToInt32(INPUT_price.Text);
+
+            var price_str = INPUT_price.Text.Replace(",", "");
+            var price = Convert.ToInt32(price_str);
 
             if (usage == TypeUsage.pay || usage == TypeUsage.move)
             {
@@ -55,12 +61,15 @@ namespace Banker.VIEW
                 vm.InputData(date, bank??TypeBank.none, usage, price, category, desc);
 
             }
+            INPUT_price.Text = "";
+            INPUT_desc.Text = "";
         }
 
-        List<int> list_date;
-        List<TypeUsage> list_usage;
-        List<TypeBank> list_bank;
-        List<TypeBank> list_bank_credit;
+        private List<int> list_date;
+        private List<TypeUsage> list_usage;
+        private List<TypeBank> list_bank;
+        private List<TypeBank> list_bank_credit;
+
         private void Create_CBItem()
         {
             #region date
@@ -158,6 +167,31 @@ namespace Banker.VIEW
             }
             
 
+        }
+    
+        public void LoadBankData(TypeBank bank)
+        {
+            nowbank = bank;
+            pagetype = TYPEUSAGEDATA.entire;
+        }
+
+        private void BTN_ListType(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            if(btn == btn_entire)
+            {
+                grid_entire.Visibility = Visibility.Visible;
+                grid_set.Visibility = Visibility.Collapsed;
+                pagetype = TYPEUSAGEDATA.entire;
+            }
+            else if(btn == btn_cluster)
+            {
+                grid_entire.Visibility = Visibility.Collapsed;
+                grid_set.Visibility = Visibility.Visible;
+                pagetype = TYPEUSAGEDATA.cluster;
+            }
+
+            vm.LoadData(pagetype, nowbank);
         }
     }
 }

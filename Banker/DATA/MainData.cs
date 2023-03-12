@@ -79,23 +79,13 @@ namespace Banker.DATA
                     else if (key == KEYS.PRICE) { v.price = Convert.ToInt32(val); }
                     else if (key == KEYS.CATEGORY) { v.category = Convert.ToInt32(val); }
                     else if (key == KEYS.DESC) { v.desc = val; }
+                    else if (key == KEYS.TOBANK) { v.tobank = (TypeBank)Convert.ToInt32(val); }
+
                 }
                 datalist.Add(v);
 
             }
 
-
-            #region read category
-            /*var categorydata = sources[KEYS.CATEGORY];
-            categorydata = categorydata.Substring(1, categorydata.Length - 2);
-            var categorydata_list = categorydata.Split(',');
-
-            foreach (var c in categorydata_list)
-            {
-                var temp_category = c.Split(':');
-                categorys.Add(Convert.ToInt32(temp_category[0]), temp_category[1]);
-            }*/
-            #endregion
         }
 
         public async void SaveData()
@@ -103,9 +93,9 @@ namespace Banker.DATA
             var result = "";
             foreach(var v in datalist)
             {
-                result += v.ToString()+",";
+                result += v.ToString()+",\n";
             }
-            result = result.Remove(result.Length - 1);
+            result = result.Remove(result.Length - 2);
                 
 
             FileMaster.Write($"data{_year}", result, false);

@@ -51,7 +51,7 @@ namespace Banker.VIEW
         private void BTN_InitCashInput(object sender, RoutedEventArgs e)
         {
             var v = INPUT_initbank.SelectedItem as TypeBank?;
-            var cash = Convert.ToInt32(INPUT_initcash.Text);
+            var cash = Convert.ToInt32(INPUT_initcash.Text.Replace(",",""));
             vm.Input_InitCash(v,cash);
 
             INPUT_initcash.Text = "";

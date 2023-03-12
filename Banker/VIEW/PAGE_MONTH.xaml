@@ -6,23 +6,106 @@
       xmlns:local="clr-namespace:Banker.VIEW"
       mc:Ignorable="d" Loaded="Page_Loaded"
       d:DesignHeight="450" d:DesignWidth="800">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./_resource/Control.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="./_resource/Base.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 
-    <ListBox ItemsSource="{Binding datalist}">
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding BANK}"/>
-                    <TextBlock Grid.Column="1" Text="{Binding PRICE}"/>
-                    <TextBlock Grid.Column="1" Text="{Binding USE}"/>
-                    <TextBlock Grid.Column="1" Text="{Binding MAKE}"/>
-                    <TextBlock Grid.Column="1" Text="{Binding TOTAL}"/>
-                </Grid>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <TextBlock Width="100" Text="총 액"/>
+                <TextBlock Width="100" Text="{Binding PRICE_TOTAL}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Width="100" Text="총 지출액"/>
+                <TextBlock Width="100" Text="{Binding PRICE_TOTAL_USE}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <TextBlock Width="100" Text="총 수입액"/>
+                <TextBlock Width="100" Text="{Binding PRICE_TOTAL_GET}"/>
+            </StackPanel>
+
+        </Grid>
+        <ListBox Grid.Row="1" Background="Gray" 
+                 BorderThickness="0" ItemsSource="{Binding datalist}" 
+                 HorizontalContentAlignment="Stretch"
+                 SelectionChanged="LB_SelectBank">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" >
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Name="Bd" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                                    <ContentPresenter 
+                                            Content="{TemplateBinding ContentControl.Content}"
+                                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                            SnapsToDevicePixels="True"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>   
+                </Style>
+
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="True">
+                            <Setter Property="Border.Background" TargetName="testttt" Value="red"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                    <Border CornerRadius="15" Background="White"
+                            Name="testttt" Margin="10,5,10,5" Padding="15">
+                        <StackPanel Orientation="Horizontal" Height="80">
+                            <Grid Width="190">
+                                <Grid.RowDefinitions >
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding BANK}" Grid.Row="0"
+                                           Margin="0,0,40,0"
+                                           FontWeight="DemiBold" FontSize="19"/>
+                                <TextBlock Text="{Binding PRICE}" Grid.Row="1"
+                                           TextAlignment="Right" VerticalAlignment="Bottom"
+                                           FontWeight="Medium" FontSize="18"/>
+                            </Grid>
+                            <Border BorderBrush="Gray" BorderThickness="1" Margin="40,0,40,0"/>
+                            <Grid>
+                                <Grid.RowDefinitions >
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Style="{StaticResource MonthTB}" Grid.Row="0" Grid.Column="0" Text="지출 금액"/>
+                                <TextBlock Style="{StaticResource MonthTB}"  Grid.Row="1" Grid.Column="0" Text="수입 금액"/>
+                                <TextBlock Style="{StaticResource MonthTB}" Grid.Row="2" Grid.Column="0" Text="총합 금액"/>
+
+                                <TextBlock Style="{StaticResource MonthTB}" Grid.Row="0" Grid.Column="1" Text="{Binding USE}"/>
+                                <TextBlock Style="{StaticResource MonthTB}"  Grid.Row="1" Grid.Column="1" Text="{Binding MAKE}"/>
+                                <TextBlock Style="{StaticResource MonthTB}"  Grid.Row="2" Grid.Column="1" Text="{Binding TOTAL}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
     </ListBox>
+    </Grid>
 </Page>

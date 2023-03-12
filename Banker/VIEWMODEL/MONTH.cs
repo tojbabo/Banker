@@ -1,6 +1,7 @@
 ﻿using Banker.DATA;
 using Banker.DATA.ABSTRACT;
 using Banker.MODEL;
+using Banker.UTIL;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,34 @@ namespace Banker.VIEWMODEL
 {
     public class MONTH :INPC
     {
+        #region property
         public List<MonthItem> datalist { get; set; }
+        public string PRICE_TOTAL { get
+            {
+                int price = 0;
+                datalist.ForEach(x => price += x.price);
+                return STRING.Num2String(price);
+            }
+        }
+        public string PRICE_TOTAL_USE
+        {
+            get
+            {
+                int price = 0;
+                datalist.ForEach(x => price += x.price_use);
+                return STRING.Num2String(price);
+            }
+        }
+        public string PRICE_TOTAL_GET
+        {
+            get
+            {
+                int price = 0;
+                datalist.ForEach(x => price += x.price_make);
+                return STRING.Num2String(price);
+            }
+        }
+        #endregion
         MASTER master;
         public MONTH()
         {
@@ -47,18 +75,39 @@ namespace Banker.VIEWMODEL
             {
                 var target = datalist.Where(x => x.bank == m.bank).FirstOrDefault();
                 if (target == null) continue;
-                
-                if(m.usage == TypeUsage.make)
+
+                if (m.usage == TypeUsage.make)
                 {
                     target.price_make += m.price;
                 }
-                else if(m.usage == TypeUsage.use)
+                else if (m.usage == TypeUsage.use)
                 {
-                    target.price_use += m.price; 
+                    target.price_use += m.price;
+                }
+                //else if (m.usage == TypeUsage.pay || m.usage == TypeUsage.move)
+                else
+                {
+                    var target_to = datalist.Where(x => x.bank == m.tobank).FirstOrDefault();
+                    target.price -= m.price;
+                    target_to.price += m.price;
                 }
             }
-            
-        }
 
+            int total = 0;
+            int use = 0;
+            int make = 0;
+            foreach(var v in datalist)
+            {
+                total += v.price;
+                use += v.price_use;
+                make += v.price_make;
+            }
+
+            OnpropertyChanged(nameof(PRICE_TOTAL));
+            OnpropertyChanged(nameof(PRICE_TOTAL_GET));
+            OnpropertyChanged(nameof(PRICE_TOTAL_USE));
+
+
+        }
     }
 }

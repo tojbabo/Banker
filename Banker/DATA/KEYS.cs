@@ -14,6 +14,7 @@ namespace Banker.DATA
         public static string BANK = "bank";
         public static string USAGE = "usage";
         public static string PRICE = "price";
+        public static string TOBANK = "tobank";
         public static string CATEGORY = "category";
         public static string DESC = "desc";
         public static string INITCASH = "initcash";

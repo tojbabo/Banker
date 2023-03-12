@@ -1,4 +1,5 @@
 ﻿using Banker.DATA;
+using Banker.MODEL;
 using Banker.VIEWMODEL;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,15 @@ namespace Banker.VIEW
 
             vm.LoadData();
 
+        }
+
+        private void LB_SelectBank(object sender, SelectionChangedEventArgs e)
+        {
+            var lb = sender as ListBox;
+            var item = lb.SelectedItem as MonthItem ;
+            var bank = item.bank;
+
+            master.main.ChangePage(bank);
         }
     }
 }

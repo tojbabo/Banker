@@ -1,4 +1,5 @@
 ﻿using Banker.DATA;
+using Banker.DATA.ABSTRACT;
 using Banker.MODEL;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using static Banker.MODEL.ENUM;
 
 namespace Banker.VIEWMODEL
 {
-    public class META
+    public class META : INPC
     {
 
         private MASTER master;
@@ -20,6 +21,7 @@ namespace Banker.VIEWMODEL
         public Dictionary<int,string> categorys { get => metadata.categorys; }
         public ObservableCollection<InitItem> initcashs { get => metadata.inits; }
 
+
         public META() {
             master = MASTER.instance;
         }
@@ -28,6 +30,7 @@ namespace Banker.VIEWMODEL
             int n_key = 0;
             if(categorys.Count !=0) n_key = categorys.Keys.Max();
             categorys.Add(n_key + 1, n_ctg);
+
         }
 
         public void Input_InitCash(TypeBank? bank, int cash )

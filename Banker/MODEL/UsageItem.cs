@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using static Banker.MODEL.ENUM;
 
 namespace Banker.MODEL
@@ -13,9 +14,16 @@ namespace Banker.MODEL
     {
         public string DAY { get => $"{month}.{day}"; }
         public string BANK { get => bank.desc(); }
-        public string PRICE { get => STRING.Num2String(price); }
-        public string CATEGORY { get => $"{MASTER.instance.metadata.categorys[category]}"; }
-        public string DESC { get => desc; }
+        public string PRICE { get => ((usage == TypeUsage.use)?"- ":"") + STRING.Num2String(price); }
+        public SolidColorBrush COLOR { get => (usage == TypeUsage.use) ? COLORS.USE : COLORS.MAKE; }
+        public string CATEGORY{get=> $"{MASTER.instance.metadata.GetCategory(category)}";}
+        public string DESC
+        {
+            get => (usage != TypeUsage.move && usage != TypeUsage.pay)
+                ? desc
+                : tobank?.desc();
+        }
+        
 
         public int month { get; set; }
         public int day { get; set; }
@@ -28,14 +36,30 @@ namespace Banker.MODEL
 
         public new string ToString()
         {
-            var str = $"month:{month},"
-                + $"day:{day},"
-                + $"bank:{(int)bank},"
-                + $"usage:{(int)usage},"
-                + $"price:{price},"
-                + $"category:{category},"
-                + $"desc:{desc}";
+            var str = "";
+            if (usage == TypeUsage.make || usage == TypeUsage.use)
+            {
 
+                str = $"{KEYS.MONTH}:{month},"
+                   + $"{KEYS.DAY}:{day},"
+                   + $"{KEYS.BANK}:{(int)bank},"
+                   + $"{KEYS.USAGE}:{(int)usage},"
+                   + $"{KEYS.PRICE}:{price},"
+                   + $"{KEYS.CATEGORY}:{category},"
+                   + $"{KEYS.DESC}:{desc}";
+            }
+            //else if(usage == TypeUsage.pay || usage == TypeUsage.move)
+
+            else
+            {
+                str = $"{KEYS.MONTH}:{month},"
+                   + $"{KEYS.DAY}:{day},"
+                   + $"{KEYS.BANK}:{(int)bank},"
+                   + $"{KEYS.USAGE}:{(int)usage},"
+                   + $"{KEYS.PRICE}:{price},"
+                   + $"{KEYS.TOBANK}:{(int)tobank}";
+
+            }
             return "{" + str + "}";
         }
     }

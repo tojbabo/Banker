@@ -44,8 +44,10 @@ namespace Banker.VIEW
         private void LB_SelectBank(object sender, SelectionChangedEventArgs e)
         {
             var lb = sender as ListBox;
-            var item = lb.SelectedItem as MonthItem ;
-            var bank = item.bank;
+            var item = lb.SelectedItem as MonthData ;
+
+            if (item == null) return;
+            var bank = item.bankcode;
 
             master.main.ChangePage(bank);
         }

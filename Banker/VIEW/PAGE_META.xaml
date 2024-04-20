@@ -7,19 +7,35 @@
       mc:Ignorable="d" Loaded="Page_Loaded"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PAGE_META">
-
+    <Page.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <!--월 초 잔액-->
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" ItemsSource="{Binding initcashs}">
+            <TextBlock Grid.Row="0" Background="Black" Height="1"/>
+            <TextBlock Grid.Row="0" Text="계좌 잔액 등록" Margin="10,0,0,0" Padding="10,0,10,0"
+                       Background="White" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <ListBox Grid.Row="1" ItemsSource="{Binding initcashs}" BorderThickness="0"
+                 HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -29,24 +45,24 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding TIME}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding BANK}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding name}"/>
                             <TextBlock Grid.Column="2" Text="{Binding PRICE}"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Row="0" x:Name="INPUT_initbank"/>
-                <TextBox Grid.Column="1" x:Name="INPUT_initcash"
-                         PreviewTextInput="OnlyNumber" 
-                         TextChanged="NumberDecoration"/>
-                <Button Grid.Column="2" Content="잔액 정리" 
-                        Click="BTN_InitCashInput" />
+                <TextBox Grid.Column="0" Name="INPUT_initbank"/>
+                <ComboBox Grid.Column="1" x:Name="COMBO_banktype"/>
+                <TextBox Grid.Column="2" x:Name="INPUT_initcash"
+                         PreviewTextInput="OnlyNumber" TextChanged="NumberDecoration"/>
+                <Button Grid.Column="3" Content="잔액 입력" Click="BTN_InitCashInput"/>
             </Grid>
 
         </Grid>
@@ -56,10 +72,18 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" ItemsSource="{Binding categorys}">
+            <ListBox Grid.Row="0" ItemsSource="{Binding categorys}"
+                 HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Value}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding CODE}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding DESC}"/>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             
@@ -74,6 +98,8 @@
                 <Button Grid.Column="1" Content="추가" Click="BTN_CategoryInput" />
             </Grid>
         </Grid>
+
+        <Button Grid.Row="2" Content="save" Click="BTN_MetaSave"/>
 
     </Grid>
 </Page>

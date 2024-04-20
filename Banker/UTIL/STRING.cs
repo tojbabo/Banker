@@ -14,6 +14,7 @@ namespace Banker.UTIL
         /// <returns></returns>
         public static string Num2String(double num)
         {
+            if (num == 0) return "0";
             return String.Format("{0:#,###}", num); ;
         }
 

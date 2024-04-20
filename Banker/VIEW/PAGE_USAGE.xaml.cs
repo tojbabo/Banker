@@ -4,6 +4,7 @@ using Banker.UTIL;
 using Banker.VIEWMODEL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,9 +19,10 @@ namespace Banker.VIEW
     public partial class PAGE_USAGE : Page
     {
         private MASTER master = MASTER.instance;
+        private MasterMeta meta;
         private USAGE vm;
-        private TypeBank nowbank = TypeBank.none;
-        private TYPEUSAGEDATA pagetype = TYPEUSAGEDATA.entire;
+        private int nowbank = -1;
+        private TYPEUSAGEDATA pagetype = TYPEUSAGEDATA.all;
 
         public PAGE_USAGE()
         {
@@ -30,10 +32,11 @@ namespace Banker.VIEW
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             vm = master.usage;
+            meta = master.metadata;
             this.DataContext = vm;
-            Create_CBItem();
 
             vm.LoadData(pagetype, nowbank);
+            Create_CBItem();
         }
 
 
@@ -41,7 +44,7 @@ namespace Banker.VIEW
         {
             if (INPUT_price.Text == "") return;
 
-            var bank = INPUT_bank.SelectedItem as TypeBank?;
+            var bank = INPUT_bank.SelectedItem as string;
             var date = list_date[INPUT_date.SelectedIndex];
             var usage = list_usage[INPUT_use.SelectedIndex];
 
@@ -50,15 +53,15 @@ namespace Banker.VIEW
 
             if (usage == TypeUsage.pay || usage == TypeUsage.move)
             {
-                var tobank = INPUT_bank_sub.SelectedItem as TypeBank?;
-                vm.InputData(date, bank??TypeBank.none, usage, price, tobank??TypeBank.none);
+                var tobank = INPUT_bank_sub.SelectedItem as string;
+                vm.InputData(date, bank, usage, price, tobank);
 
             }
             else
             {
                 var category = Convert.ToString(INPUT_category.SelectedItem);
                 var desc = INPUT_desc.Text;
-                vm.InputData(date, bank??TypeBank.none, usage, price, category, desc);
+                vm.InputData(date, bank, usage, price, category, desc);
 
             }
             INPUT_price.Text = "";
@@ -67,8 +70,6 @@ namespace Banker.VIEW
 
         private List<int> list_date;
         private List<TypeUsage> list_usage;
-        private List<TypeBank> list_bank;
-        private List<TypeBank> list_bank_credit;
 
         private void Create_CBItem()
         {
@@ -103,26 +104,17 @@ namespace Banker.VIEW
             #endregion
 
             #region bank
-            list_bank = new List<TypeBank>();
-            list_bank_credit = new List<TypeBank>();
-            list_bank.Add(TypeBank.shinhan);
-            list_bank.Add(TypeBank.kakao);
-            list_bank.Add(TypeBank.suhyup);
-            list_bank.Add(TypeBank.ibk);
-            list_bank.Add(TypeBank.credit_samsung);
-
-            list_bank_credit.Add(TypeBank.credit_samsung);
-
-            INPUT_bank.ItemsSource = list_bank;
-            INPUT_bank.SelectedItem = TypeBank.shinhan;
-
-
-
+            var v = meta.GetBankList();
+            INPUT_bank.ItemsSource = v;
+            INPUT_bank.SelectedIndex = nowbank;
 
             #endregion
 
             #region use_category
-            var categorys = master.metadata.categorys.Values;
+            List<Category> categories = new List<Category>();
+
+            
+            var categorys = meta.categorys.Select(x => x.DESC).ToList();
 
             INPUT_category.ItemsSource = categorys;
             INPUT_category.SelectedIndex = 0;
@@ -149,17 +141,19 @@ namespace Banker.VIEW
         {
             var v = (sender as ComboBox).SelectedItem as TypeUsage?;
 
+            var sublist = meta.GetBankList();
+
             if(v == TypeUsage.move )
             {
                 INPUT_bank_sub.Visibility = Visibility.Visible;
-                INPUT_bank_sub.ItemsSource = list_bank;
-                INPUT_bank_sub.SelectedItem = TypeBank.kakao;
+                INPUT_bank_sub.ItemsSource = sublist;
+                INPUT_bank_sub.SelectedIndex = 0;
             }
-            else if( v == TypeUsage.pay)
+            else if(v == TypeUsage.pay)
             {
                 INPUT_bank_sub.Visibility = Visibility.Visible;
-                INPUT_bank_sub.ItemsSource = list_bank_credit;
-                INPUT_bank_sub.SelectedItem = TypeBank.credit_samsung;
+                INPUT_bank_sub.ItemsSource = sublist;
+                INPUT_bank_sub.SelectedIndex = 0;
             }
             else
             {
@@ -169,10 +163,10 @@ namespace Banker.VIEW
 
         }
     
-        public void LoadBankData(TypeBank bank)
+        public void LoadBankData(int bankcode = -1)
         {
-            nowbank = bank;
-            pagetype = TYPEUSAGEDATA.entire;
+            nowbank = bankcode;
+            pagetype = TYPEUSAGEDATA.all;
         }
 
         private void BTN_ListType(object sender, RoutedEventArgs e)
@@ -182,16 +176,23 @@ namespace Banker.VIEW
             {
                 grid_entire.Visibility = Visibility.Visible;
                 grid_set.Visibility = Visibility.Collapsed;
-                pagetype = TYPEUSAGEDATA.entire;
+                pagetype = TYPEUSAGEDATA.all;
             }
             else if(btn == btn_cluster)
             {
                 grid_entire.Visibility = Visibility.Collapsed;
                 grid_set.Visibility = Visibility.Visible;
-                pagetype = TYPEUSAGEDATA.cluster;
+                pagetype = TYPEUSAGEDATA.statistics;
             }
 
             vm.LoadData(pagetype, nowbank);
+        }
+
+        private void BTN_UsageDelete(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            var contents = b.DataContext as DataUsage;
+            vm.RemoveItem(contents);
         }
     }
 }

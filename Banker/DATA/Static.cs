@@ -8,6 +8,7 @@ namespace Banker.DATA
 {
     public class Static
     {
-        public static string PATH = "storage/";
+        //public static string PATH = "storage/";
+        public static string PATH = "C:/Dev/storage/";
     }
 }

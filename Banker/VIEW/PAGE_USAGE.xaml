@@ -26,6 +26,7 @@
             <Button Content="월 지출" Click="BTN_ListType" Name="btn_entire"/>
             <Button Content="지출 순위" Click="BTN_ListType" Name="btn_cluster"/>
         </StackPanel>
+        <!--통계 리스트-->
         <Grid Name="grid_set" Grid.Row="1" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -77,6 +78,7 @@
                         <DataTemplate.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="20"/>
                             </Style>
 
                         </DataTemplate.Resources>
@@ -89,10 +91,10 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding CATEGORY}" Grid.Column="0" FontSize="18" />
-                                <TextBlock Text="{Binding PRICE}" Grid.Column="1" FontSize="18" />
-                                <TextBlock Text="{Binding USEPRICE}" Grid.Column="2" FontSize="18" />
-                                <TextBlock Text="{Binding COUNT}" Grid.Column="3" FontSize="18" />
+                                <TextBlock Text="{Binding CATEGORY}" Grid.Column="0"/>
+                                <TextBlock Text="{Binding PRICE}" Grid.Column="1" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding USEPRICE}" Grid.Column="2" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding COUNT}" Grid.Column="3"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -100,6 +102,7 @@
             </ListBox>
 
         </Grid>
+        <!--사용 리스트-->
         <Grid Name="grid_entire" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -113,6 +116,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0">
                     <TextBlock Text="날짜"/>
@@ -121,7 +125,7 @@
                     <TextBlock Text="은행"/>
                 </Border>
                 <Border Grid.Column="2">
-                    <TextBlock Text="금액"/>
+                    <TextBlock Text="금액" HorizontalAlignment="Right"/>
                 </Border>
                 <Border Grid.Column="3">
                     <TextBlock Text="사용처"/>
@@ -151,10 +155,17 @@
                         <DataTemplate.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="20"/>
                             </Style>
-                        
                         </DataTemplate.Resources>
-                        <Border BorderThickness="0,0.5,0,0.5" Height="50">
+                        <DataTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.Background" TargetName="lbbd" Value="#c7c7c7"/>
+                                <Setter Property="Button.Visibility" TargetName="btn_del" Value="Visible"/>
+                            </Trigger>
+                        </DataTemplate.Triggers>
+
+                        <Border x:Name="lbbd" BorderThickness="0,0.5,0,0.5" Height="50"  Background="White">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -162,13 +173,16 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding DAY}" Grid.Column="0" FontSize="18" />
-                                <TextBlock Text="{Binding BANK}" Grid.Column="1" FontSize="18" />
-                                <TextBlock Text="{Binding PRICE}" Grid.Column="2" FontSize="18"
-                                           Foreground="{Binding COLOR}"/>
-                                <TextBlock Text="{Binding CATEGORY}" Grid.Column="3" FontSize="18" />
-                                <TextBlock Text="{Binding DESC}" Grid.Column="4" FontSize="18" />
+                                <TextBlock Text="{Binding DAY}" Grid.Column="0"/>
+                                <TextBlock Text="{Binding BANK}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding PRICE}" Grid.Column="2" HorizontalAlignment="Right"
+                                           Foreground="{Binding COLOR}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding CATEGORY}" Grid.Column="3"/>
+                                <TextBlock Text="{Binding DESC}" Grid.Column="4"/>
+                                <Button x:Name="btn_del" Content="삭제" Grid.Column="5" Visibility="Collapsed"
+                                        Click="BTN_UsageDelete"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

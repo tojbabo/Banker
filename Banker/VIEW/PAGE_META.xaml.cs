@@ -50,28 +50,35 @@ namespace Banker.VIEW
 
         private void BTN_InitCashInput(object sender, RoutedEventArgs e)
         {
-            var v = INPUT_initbank.SelectedItem as TypeBank?;
-            var cash = Convert.ToInt32(INPUT_initcash.Text.Replace(",",""));
-            vm.Input_InitCash(v,cash);
+            var idx = COMBO_banktype.SelectedIndex;
+            var name = INPUT_initbank.Text;
+
+            if (name == "") return;
+
+            var cash = Convert.ToInt32(INPUT_initcash.Text.Replace(",", ""));
+
+            EBank b = (EBank)idx;
+
+
+            vm.Input_InitCash(name, b, cash);
 
             INPUT_initcash.Text = "";
+            INPUT_initbank.Text = "";
 
 
         }
 
-        List<TypeBank> list_bank;
+        List<String> list_bank;
         private void Create_Combox()
         {
             #region bank
-            list_bank = new List<TypeBank>();
-            list_bank.Add(TypeBank.shinhan);
-            list_bank.Add(TypeBank.kakao);
-            list_bank.Add(TypeBank.suhyup);
-            list_bank.Add(TypeBank.ibk);
-            list_bank.Add(TypeBank.credit_samsung);
+            list_bank = new List<String>();
+            list_bank.Add(EBank.io.desc());
+            list_bank.Add(EBank.credit.desc());
+            list_bank.Add(EBank.saving.desc());
 
-            INPUT_initbank.ItemsSource = list_bank;
-            INPUT_initbank.SelectedItem = TypeBank.shinhan;
+            COMBO_banktype.ItemsSource = list_bank;
+            COMBO_banktype.SelectedIndex = 0;
 
             #endregion
         }
@@ -89,6 +96,11 @@ namespace Banker.VIEW
             var temp = Convert.ToInt64(target.Text.Replace(",", ""));
             target.Text = STRING.Num2String(temp);
             target.SelectionStart = target.Text.Length;
+        }
+
+        private void BTN_MetaSave(object sender, RoutedEventArgs e)
+        {
+            vm.save();
         }
     }
 }

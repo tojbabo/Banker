@@ -15,11 +15,11 @@ namespace Banker.VIEWMODEL
     {
 
         private MASTER master;
-        private MetaData metadata { get => master.metadata; }
-        private MainData maindata { get => master.maindata; }
+        private MasterMeta metadata { get => master.metadata; }
+        private MasterUsage maindata { get => master.maindata; }
 
-        public Dictionary<int,string> categorys { get => metadata.categorys; }
-        public ObservableCollection<InitItem> initcashs { get => metadata.inits; }
+        public ObservableCollection<Category> categorys { get => metadata.categorys; }
+        public ObservableCollection<DataInit> initcashs { get => metadata.inits; }
 
 
         public META() {
@@ -28,22 +28,40 @@ namespace Banker.VIEWMODEL
         public void Input_Category(string n_ctg)
         {
             int n_key = 0;
-            if(categorys.Count !=0) n_key = categorys.Keys.Max();
-            categorys.Add(n_key + 1, n_ctg);
+
+            if(categorys.Count != 0)
+            {
+                var v = categorys.ToList().OrderBy(x => x.CODE).Last();
+                n_key = v.CODE;
+            }
+
+            categorys.Add(new Category()
+            {
+                CODE = n_key+1,
+                DESC = n_ctg
+            });
 
         }
 
-        public void Input_InitCash(TypeBank? bank, int cash )
+        public void Input_InitCash(string name, EBank bank, int cash)
         {
-            if(bank != null)
-            {
-                initcashs.Add(new InitItem()
+            var code = metadata.GetLastCode();
+            initcashs.Add(new DataInit()
                 {
-                    bank = bank??TypeBank.none ,
+                    name = name,
+                    banktype = bank,
+                    bankcode = code,
                     price = cash,
                     time = DateTime.Now
                 });
-            }
+
+            //리로드 
         }
+
+        public void save()
+        {
+            metadata.SaveData();
+        }
+        
     }
 }

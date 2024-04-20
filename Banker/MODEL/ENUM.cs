@@ -10,21 +10,15 @@ namespace Banker.MODEL
 {
     public static class ENUM
     {
-
-        public enum TypeBank
+        public enum EBank
         {
             none = -1,
-            [Description("수협")]
-            suhyup,
-            [Description("신한")]
-            shinhan,
-            [Description("기업")]
-            ibk,
-            [Description("카카오")]
-            kakao,
-            [Description("삼성 카드")]
-            credit_samsung,
-
+            [Description("입출금")]
+            io,
+            [Description("신용카드")]
+            credit,
+            [Description("적금")]
+            saving,
         }
         public enum TypeUsage
         {

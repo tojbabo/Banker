@@ -1,6 +1,9 @@
-﻿using Banker.VIEWMODEL;
+﻿using Banker.MODEL;
+using Banker.VIEWMODEL;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,10 +25,11 @@ namespace Banker.DATA
         private MASTER () { }
         #endregion
 
-        public MetaData metadata;
-        public MainData maindata;
+        public MasterMeta metadata;
+        public MasterUsage maindata;
         public DateTime targetdate;
         public MainWindow main;
+        
 
         #region about vm
         private USAGE _usage;
@@ -42,18 +46,46 @@ namespace Banker.DATA
         {
             this.main = main;
             targetdate = DateTime.Now;
-            metadata = new MetaData();
-            maindata = new MainData(targetdate.Year, targetdate.Month);
+            metadata = new MasterMeta();
+            maindata = new MasterUsage(targetdate.Year, targetdate.Month);
             Load();
             _Init_VM();
         }
 
-        public void Load()
+        public void DateChange(int bias)
         {
-            metadata.LoadData();
-            maindata.LoadData();
+            if (bias == 0)
+            {
+                targetdate = DateTime.Now;
+            }
+            else
+            {
+                targetdate = targetdate.AddMonths(bias);
+            }
+            Load();
         }
 
+
+
+        public void Load()
+        {
+            _ = Task.Run(() =>
+            {
+                var meta = metadata.LoadData(targetdate);
+                var main = maindata.LoadData();
+                meta.Wait();
+                main.Wait();
+            });
+        }
+
+        public void Save()
+        {
+            _ = Task.Run(() =>
+            {
+                maindata.SaveData();
+                metadata.SaveData();
+            });
+        }
 
         private void _Init_VM()
         {

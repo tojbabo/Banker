@@ -12,5 +12,6 @@ namespace Banker.DATA
         public static SolidColorBrush TRANSPARENT = new SolidColorBrush(Colors.Transparent);
         public static SolidColorBrush USE = new SolidColorBrush(Colors.Red);
         public static SolidColorBrush MAKE = new SolidColorBrush(Colors.Green);
+        public static SolidColorBrush NORMAL = new SolidColorBrush(Colors.Black);
     }
 }

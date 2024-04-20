@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Banker.MODEL.ENUM;
@@ -14,38 +15,44 @@ namespace Banker.VIEWMODEL
     public class USAGE:INPC
     {
         #region property
-        public ObservableCollection<UsageItem> DATALIST { get; set; }
+        public ObservableCollection<DataUsage> DATALIST { get; set; }
         public List<UsageSet> DATASET { get; set; }
         #endregion
 
         private MASTER _master;
-        private MainData data { get => _master.maindata; }
-        private ObservableCollection<UsageItem> _sources { get => data.datalist; }
-        private DateTime _today;
+        private MasterUsage data { get => _master.maindata; }
+        private MasterMeta meta { get => _master.metadata; }
+        private ObservableCollection<DataUsage> _sources { get => data.usages; }
+        private DateTime _today { get => _master.targetdate; }
+        TYPEUSAGEDATA nowtype; int nowbank;
 
         public USAGE()
         {
             _master = MASTER.instance;
-            _today = DateTime.Now;
-            DATALIST = new ObservableCollection<UsageItem>();
+            DATALIST = new ObservableCollection<DataUsage>();
             DATASET = new List<UsageSet>();
         }
 
-        public bool InputData(int date, TypeBank bank, TypeUsage usage, int price, string category, string desc)
+        public bool InputData(int date, string bank, TypeUsage usage, int price, string category, string desc)
         {
-            var v = _master.metadata.categorys.FirstOrDefault(x => x.Value == category);
-            if (v.Value == null) return false;
+            var v = meta.categorys.FirstOrDefault(x => x.DESC == category);
+            if (v.DESC == null) return false;
 
-            var d = new UsageItem
+            var code = meta.GetBankCode(bank);
+            if (code == -1) return false;
+
+            var d = new DataUsage
             {
+                year = _today.Year,
                 month = _today.Month,
                 day = date,
-                bank = bank,
+                bankcode = code,
                 usage = usage,
-                category = v.Key,
+                category = v.CODE,
                 price = price,
                 desc = desc,
             };
+
 
             DATALIST.Add(d);
             _sources.Add(d);
@@ -53,14 +60,18 @@ namespace Banker.VIEWMODEL
 
             return true;
         }
-        public bool InputData(int date, TypeBank bank, TypeUsage usage, int price, TypeBank to)
+        public bool InputData(int date, string bank, TypeUsage usage, int price, string to)
         {
-            var d = new UsageItem
+            var code = meta.GetBankCode(bank);
+            var tocode = meta.GetBankCode(to);
+            if (code == -1 || tocode == -1) return false;
+            var d = new DataUsage
             {
+                year = _today.Year,
                 month = _today.Month,
                 day = date,
-                bank = bank,
-                tobank = to,
+                bankcode = code,
+                tocode = tocode,
                 usage = usage,
                 price = price,
             };
@@ -72,10 +83,12 @@ namespace Banker.VIEWMODEL
             return true;
         }
     
-        public void LoadData(TYPEUSAGEDATA type, TypeBank bank)
+        public void LoadData(TYPEUSAGEDATA type, int bank)
         {
-
-            if(type == TYPEUSAGEDATA.cluster)
+            nowtype = type;
+            nowbank = bank;
+            // 항목별 통계 데이터
+            if(type == TYPEUSAGEDATA.statistics)
             {
                 DATASET.Clear();
                 _sources.ToList().ForEach(x =>
@@ -113,31 +126,43 @@ namespace Banker.VIEWMODEL
                 OnpropertyChanged(nameof(DATASET));
 
             }
-            else if(type == TYPEUSAGEDATA.entire)
+            // 은행별 지출 내역
+            else if(type == TYPEUSAGEDATA.all)
             {
+                //var temp_source = _sources.Where(x => x.month == _today.Month).ToList();
+                var temp_source = _sources.ToList();
                 DATALIST.Clear();
-                if (bank == TypeBank.none)
+                if (bank == -1)
                 {
-                    _sources.ToList().OrderBy(x=>x.day).ToList().ForEach(x => DATALIST.Add(x));
+                    temp_source
+                        .OrderBy(x=>x.date).ToList()
+                        .ForEach(x => DATALIST.Add(x));
                 }
                 else
                 {
-                    var a = _sources.Where(x => x.bank == bank).ToList();
-                    var b = a.OrderBy(x => x.day).ToList();
+                    var a = temp_source.Where(x => (x.bankcode == bank || x.tocode == bank)).ToList();
+                    var b = a.OrderBy(x => x.date).ToList();
                     b.ForEach( x=> DATALIST.Add(x));
-
                 }
 
             }
 
         }
-    
+        
+        public void RemoveItem(DataUsage target)
+        {
+            _sources.Remove(target);
+            data.SaveData();
+            LoadData(nowtype, nowbank);
+        }
     }
 
     public enum TYPEUSAGEDATA
     {
-        entire,
-        cluster,
+        // 전체 지출 내역
+        all,
+        // 통계
+        statistics,
     }
 
 }

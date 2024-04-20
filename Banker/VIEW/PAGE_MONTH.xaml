@@ -76,9 +76,11 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding BANK}" Grid.Row="0"
+                                <!--은행명-->
+                                <TextBlock Text="{Binding NAME}" Grid.Row="0"
                                            Margin="0,0,40,0"
                                            FontWeight="DemiBold" FontSize="19"/>
+                                <!--가격-->
                                 <TextBlock Text="{Binding PRICE}" Grid.Row="1"
                                            TextAlignment="Right" VerticalAlignment="Bottom"
                                            FontWeight="Medium" FontSize="18"/>

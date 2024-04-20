@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -59,13 +62,14 @@
     <Compile Include="DATA\COLORS.cs" />
     <Compile Include="DATA\KEYS.cs" />
     <Compile Include="DATA\MASTER.cs" />
-    <Compile Include="DATA\MetaData.cs" />
-    <Compile Include="DATA\MainData.cs" />
+    <Compile Include="DATA\MasterMeta.cs" />
+    <Compile Include="DATA\MasterUsage.cs" />
     <Compile Include="DATA\Static.cs" />
+    <Compile Include="MODEL\Category.cs" />
     <Compile Include="MODEL\ENUM.cs" />
-    <Compile Include="MODEL\InitItem.cs" />
-    <Compile Include="MODEL\MonthItem.cs" />
-    <Compile Include="MODEL\UsageItem.cs" />
+    <Compile Include="MODEL\DataInit.cs" />
+    <Compile Include="MODEL\MonthData.cs" />
+    <Compile Include="MODEL\DataUsage.cs" />
     <Compile Include="MODEL\UsageSet.cs" />
     <Compile Include="UTIL\FileMaster.cs" />
     <Compile Include="UTIL\STRING.cs" />
@@ -132,6 +136,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

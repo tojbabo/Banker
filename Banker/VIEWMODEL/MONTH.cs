@@ -15,7 +15,7 @@ namespace Banker.VIEWMODEL
     public class MONTH :INPC
     {
         #region property
-        public List<MonthItem> datalist { get; set; }
+        public List<MonthData> datalist { get; set; }
         public string PRICE_TOTAL { get
             {
                 int price = 0;
@@ -42,28 +42,40 @@ namespace Banker.VIEWMODEL
             }
         }
         #endregion
+
         MASTER master;
         public MONTH()
         {
             master = MASTER.instance;
-            datalist = new List<MonthItem>();
-
-            datalist.Add(new MonthItem(TypeBank.suhyup));
-            datalist.Add(new MonthItem(TypeBank.shinhan));
-            datalist.Add(new MonthItem(TypeBank.kakao));
-            datalist.Add(new MonthItem(TypeBank.ibk));
-            datalist.Add(new MonthItem(TypeBank.credit_samsung));
 
         }
         public void LoadData()
         {
-            var mains = master.maindata.datalist;
+            datalist = new List<MonthData>();
+            var mains = master.maindata.usages;
             var inits = master.metadata.inits;
 
-            foreach(var i in inits)
+            foreach (var i in inits)
             {
-                var temp = datalist.Where(x => x.bank == i.bank).FirstOrDefault();
-                if(temp.time == null || temp.time < i.time)
+                /// 은행 추가 여부 확인
+                var temp = datalist.Where(x => x.bankcode == i.bankcode).FirstOrDefault();
+
+                /// 은행이 아직 추가가 안된 경우
+                if (temp == null)
+                {
+                    datalist.Add(new MonthData()
+                    {
+                        accounttype = i.banktype,
+                        NAME = i.name,
+                        bankcode = i.bankcode,
+                        price = i.price,
+                        time = i.time
+                    });
+                }
+
+                /// 추가 된게 없거나, 더 최근 데이터가 나온 경우
+                /// 데이터 변경
+                else if (temp.time == null || temp.time < i.time)
                 {
                     temp.time = i.time;
                     temp.price = i.price;
@@ -71,43 +83,36 @@ namespace Banker.VIEWMODEL
 
             }
 
-            foreach(var m in mains)
+            foreach (var m in mains)
             {
-                var target = datalist.Where(x => x.bank == m.bank).FirstOrDefault();
+                var target = datalist.Where(x => x.bankcode == m.bankcode).FirstOrDefault();
                 if (target == null) continue;
 
-                if (m.usage == TypeUsage.make)
+                target.AddUsage(m);
+                if (m.usage == TypeUsage.pay || m.usage == TypeUsage.move)
                 {
-                    target.price_make += m.price;
-                }
-                else if (m.usage == TypeUsage.use)
-                {
-                    target.price_use += m.price;
-                }
-                //else if (m.usage == TypeUsage.pay || m.usage == TypeUsage.move)
-                else
-                {
-                    var target_to = datalist.Where(x => x.bank == m.tobank).FirstOrDefault();
-                    target.price -= m.price;
-                    target_to.price += m.price;
+                    var target_to = datalist.Where(x => x.bankcode == m.tocode).FirstOrDefault();
+                    if (target_to != null) target_to.AddUsage(m);
                 }
             }
 
             int total = 0;
             int use = 0;
             int make = 0;
-            foreach(var v in datalist)
+
+            /// 월 총 계산
+            foreach (var v in datalist)
             {
                 total += v.price;
                 use += v.price_use;
                 make += v.price_make;
             }
 
+
             OnpropertyChanged(nameof(PRICE_TOTAL));
             OnpropertyChanged(nameof(PRICE_TOTAL_GET));
             OnpropertyChanged(nameof(PRICE_TOTAL_USE));
-
-
+            OnpropertyChanged(nameof(datalist));
         }
     }
 }
